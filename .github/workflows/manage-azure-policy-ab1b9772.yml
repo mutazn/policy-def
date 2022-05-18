@@ -1,0 +1,32 @@
+name: manage-azure-policy-ab1b9772
+on:
+  workflow_dispatch:
+    inputs:
+      remarks:
+        description: 'Reason for triggering the workflow run'
+        required: false
+        default: 'Updating Azure Policies'
+
+
+## Uncomment the following if you wish to automatically trigger workflow run with every commit
+#
+#  push:
+#    paths:
+#      - 'policies/Kubernetes_Services_should_be_upgraded_to_a_non-vulnerable_Kubernetes_version_fb893a29-21bb-418c-a157-e99480ec364c/**'
+#      - .github/workflows/manage-azure-policy-ab1b9772.yml
+jobs:
+  apply-azure-policy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS_ab1b9772}}
+        allow-no-subscriptions: true
+    - name: Create or Update Azure Policies
+      uses: azure/manage-azure-policy@v0
+      with:
+        paths: |
+          policies/Kubernetes_Services_should_be_upgraded_to_a_non-vulnerable_Kubernetes_version_fb893a29-21bb-418c-a157-e99480ec364c/**
